@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+</head>
+<body>
+    <div class="h-screen bg-zinc-900 text-white p-8">
+        <!-- Header with Logout -->
+        <header class="flex justify-between items-center mb-10">
+           <div class="w-10 h-10 rounded-md overflow-hidden">
+            <img class="w-full h-full object-cover" src="/images/uploads/<%=user.profilepic%>" alt=""><!-- profile pic path in upload folder --> 
+           </div> 
+            <h1 class="text-xl font-bold">Welcome,<%= user.name %>!</h1>
+            <a href="/logout" class="text-sm rounded-md bg-red-500 px-4 py-2 hover:bg-red-600 transition">
+                Logout
+            </a>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-lg mx-auto bg-zinc-800 p-6 rounded-lg shadow-lg">
+            <h2 class="text-2xl font-semibold mb-4">Create a New Post</h2>
+            <p class="text-sm text-zinc-400 mb-6">Share your thoughts with the community.</p>
+            <form action="post" method="post" class="space-y-4">
+                <!-- Textarea -->
+                <textarea
+                    class="w-full resize-none bg-transparent border border-zinc-700 focus:border-blue-500 rounded-md p-3 text-sm outline-none"
+                    name="content"
+                    placeholder="What's on your mind?"
+                    rows="4"
+                ></textarea>
+
+                <!-- Submit Button -->
+                <button
+                    type="submit"
+                    class="w-full bg-blue-600 hover:bg-blue-700 transition text-sm font-medium py-2 rounded-md"
+                >
+                    Create New Post
+                </button>
+            </form>
+        </main>
+
+        <!-- Posts Section -->
+        <section class="posts mt-16">
+            <h3 class="text-xl font-semibold text-zinc-300 mb-4">Your Posts</h3>
+            <div class="post-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Posts -->
+                <% user.posts.reverse().forEach(function(post) { %>             <!-- show evry added post -->
+                  <div class="post bg-zinc-900 p-6 rounded-2xl border border-zinc-700 shadow-lg transition transform hover:scale-105 hover:shadow-xl">
+                    <!-- Username -->
+                    <h4 class="text-lg text-blue-400 font-semibold mb-3">
+                      <%= user.username %>
+                    </h4>
+              
+                    <!-- Post Content -->
+                    <p class="text-base text-zinc-300 leading-relaxed mb-5">
+                      <%= post.content %>
+                    </p>
+              
+                    <!-- Post Details -->
+                    <div class="flex items-center justify-between text-sm text-zinc-400">
+                      <!-- Like Count -->
+                      <span class="flex items-center">
+                        <svg class="w-4 h-4 text-red-400 mr-1" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
+                        <%= post.likes.length %> <!--post like -->
+                      </span>
+              
+                      <!-- Buttons -->
+                      <div class="btns flex space-x-4">
+                        <!-- Like/Unlike Button -->
+                        <a class="text-blue-500 hover:text-blue-400 transition" href="/like/<%= post._id %>">
+                          <%= post.likes.indexOf(user._id) === -1 ? "Like" : "Unlike" %>            <!-- like/unlike-->
+                        </a>
+              
+                        <!-- Edit Button -->
+                        <a class="text-yellow-400 hover:text-yellow-300 transition" href="/edit/<%= post._id %>">
+                          Edit
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                <% }) %>
+              </div>
+              
+        </section>
+        
+    </div>
+</body>
+
+</html> 
